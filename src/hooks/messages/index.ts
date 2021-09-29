@@ -8,7 +8,7 @@ export interface UseMessages {
   messages: ReadonlyArray<Message>;
   readonly loading: boolean;
   readonly options: GetMessagesOptions;
-  readonly setSortDirection: (sortDirection: SortDirection) => void;
+  readonly toggleSortDirection: () => void;
   readonly loadNextPage: () => void;
   readonly deleteMessage: (uuid: string) => void;
 }
@@ -29,10 +29,10 @@ export enum ActionType {
   SetMessages,
   AppendMessages,
   DeleteMessage,
-  SetSortDirection
+  ToggleSortDirection
 }
 
-interface ClientState {
+export interface ClientState {
   readonly firstLoad: boolean;
   readonly loading: boolean;
   readonly options: GetMessagesOptions;
@@ -42,8 +42,7 @@ interface ClientState {
 type Action =
   | { type: ActionType.NotifyLoading; payload: { loading: boolean } }
   | {
-      type: ActionType.SetSortDirection;
-      payload: { sortDirection: SortDirection };
+      type: ActionType.ToggleSortDirection;
     }
   | {
       type: ActionType.SetMessages;
@@ -101,13 +100,17 @@ export const reducer = (state: ClientState, action: Action): ClientState => {
           offset: filteredMessages.length
         }
       };
-    case ActionType.SetSortDirection:
+    case ActionType.ToggleSortDirection:
       return {
         ...state,
         messages: [],
         options: {
           ...state.options,
-          sortDirection: action.payload.sortDirection
+          offset: 0,
+          sortDirection:
+            state.options.sortDirection === SortDirection.ASCENDING
+              ? SortDirection.DESCENDING
+              : SortDirection.ASCENDING
         }
       };
     default:
@@ -155,10 +158,9 @@ export const useMessages = (
   /**
    * Set the sortDirection for future API requests, and sort the current messages
    */
-  const setSortDirection = (sortDirection: SortDirection) => {
+  const toggleSortDirection = () => {
     dispatch({
-      type: ActionType.SetSortDirection,
-      payload: { sortDirection }
+      type: ActionType.ToggleSortDirection
     });
   };
 
@@ -188,7 +190,7 @@ export const useMessages = (
     messages: state.messages,
     loading: state.loading,
     options: state.options,
-    setSortDirection,
+    toggleSortDirection,
     loadNextPage,
     deleteMessage
   };

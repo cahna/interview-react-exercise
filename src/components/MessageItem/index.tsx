@@ -16,10 +16,16 @@ export interface Props {
 export const MessageItem: FC<Props> = memo(({ message, onDelete }) => (
   <ListItem
     secondaryAction={
-      <IconButton edge="end" aria-label="delete" onClick={onDelete}>
+      <IconButton
+        edge="end"
+        role="button"
+        aria-label="delete"
+        onClick={onDelete}
+      >
         <DeleteForeverIcon />
       </IconButton>
     }
+    role="listitem"
   >
     <ListItemText
       primary={message.senderUuid}
@@ -27,7 +33,13 @@ export const MessageItem: FC<Props> = memo(({ message, onDelete }) => (
         <>
           <FormattedMessageDate date={message.sentAt} />
           <br />
-          <Typography component="span" variant="body2" color="text.primary">
+          <Typography
+            component="span"
+            variant="body2"
+            color="text.primary"
+            role="comment" // eslint-disable-line jsx-a11y/aria-role
+            data-author={message.senderUuid}
+          >
             {message.content}
           </Typography>
         </>

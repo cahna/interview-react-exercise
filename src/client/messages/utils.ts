@@ -18,7 +18,11 @@ export const compareMessageKey = (
 ): MessageCompareFn => {
   return (m1, m2) => {
     if (m1[key] instanceof Date) {
-      return (m2[key] as any) - (m1[key] as any);
+      if (direction === SortDirection.ASCENDING) {
+        return (m2[key] as any) - (m1[key] as any);
+      } else {
+        return (m1[key] as any) - (m2[key] as any);
+      }
     }
 
     if (m1[key] === m2[key]) {

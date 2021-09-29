@@ -8,25 +8,44 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
+import { SortDirection } from "client/messages/utils";
 import { MessageItem } from "components/MessageItem";
 import { useMessages } from "hooks/messages";
 
 import i18n from "./i18n";
 
 export const Messages: FC<{}> = () => {
-  const { loading, messages, deleteMessage, loadNextPage } = useMessages();
+  const {
+    loading,
+    messages,
+    deleteMessage,
+    loadNextPage,
+    toggleSortDirection,
+    options
+  } = useMessages();
 
   return (
     <>
       <Stack spacing={2}>
         <Toolbar component={AppBar}>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, padding: 2 }}
-          >
+          <Typography variant="h6" component="div" sx={{ padding: 2 }}>
             <FormattedMessage {...i18n.title} />
+            <IconButton
+              size="large"
+              aria-label="invert sort direction"
+              color="inherit"
+              onClick={toggleSortDirection}
+            >
+              {options.sortDirection === SortDirection.ASCENDING ? (
+                <ArrowUpwardIcon />
+              ) : (
+                <ArrowDownwardIcon />
+              )}
+            </IconButton>
           </Typography>
         </Toolbar>
         <List>

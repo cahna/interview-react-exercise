@@ -22,6 +22,9 @@ export interface IMessagesClient {
 const sleep = (seconds: number) =>
   new Promise((r) => setTimeout(r, seconds * 1000));
 
+/**
+ * Ideally this would be an HTTP client
+ */
 export const useMessagesClient = (): IMessagesClient => {
   // This represents the source-of-truth for messages (ie: server-side database)
   const [messages, setMessages] = useState<ReadonlyArray<Message>>(() => []);

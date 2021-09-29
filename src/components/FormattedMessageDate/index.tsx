@@ -6,7 +6,7 @@ export interface Props {
 }
 
 export const FormattedMessageDate: FC<Props> = ({ date }) => (
-  <>
+  <time data-testid="message-date" dateTime={date.toLocaleString()}>
     <FormattedDate value={date} weekday="short" />
     &nbsp;
     <FormattedDate
@@ -15,5 +15,5 @@ export const FormattedMessageDate: FC<Props> = ({ date }) => (
       month="long"
       year="numeric"
     /> at <FormattedTime value={date} timeZoneName="short" />
-  </>
+  </time>
 );
